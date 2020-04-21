@@ -20,7 +20,6 @@ router.get("/:userId", (req, res, next) => {
 
 router.post("/", (req, res, next) => {
   const visit = new Visit({
-    visitId: uuid(),
     userId: req.body.userId,
     name: req.body.name,
   });
