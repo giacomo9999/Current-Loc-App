@@ -1,15 +1,26 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const morgan = require("morgan");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
-const visitRoutes = require("./api/routes/visit");
+const visitRoutes = require("./api/routes/visits");
 
+mongoose.connect(process.env.CONN_STRING, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+app.use(cors());
 app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/visit", visitRoutes);
 
 app.use((req, res, next) => {
-  const error = new Error("Current Loc says: 'not found'");
+  const error = new Error("CurrentLoc App says: 'not found'");
   error.status = 404;
   next(error);
 });
