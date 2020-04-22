@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const visitSchema = mongoose.Schema({
+  visitId: String,
   userId: String,
   name: String,
 });

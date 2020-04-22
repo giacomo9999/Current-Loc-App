@@ -4,13 +4,17 @@ const { uuid } = require("uuidv4");
 
 const Visit = require("../models/visit");
 
-router.get("/:userId", (req, res, next) => {
-  const userId = req.params.userId;
-  Visit.find({ userId: userId })
+router.get("/:visitId", (req, res, next) => {
+  const visitId = req.params.visitId;
+  Visit.find({ visitId: visitId })
     .exec()
-    .then((document) => {
-      console.log(document);
-      res.status(200).json(document);
+    .then((result) => {
+      console.log(result);
+      if (result.length) {
+        res.status(200).json(result);
+      } else {
+        res.status(200).json({ message: `No results found for visit ID ${visitId}` });
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -20,6 +24,7 @@ router.get("/:userId", (req, res, next) => {
 
 router.post("/", (req, res, next) => {
   const visit = new Visit({
+    visitId: uuid(),
     userId: req.body.userId,
     name: req.body.name,
   });
@@ -27,9 +32,12 @@ router.post("/", (req, res, next) => {
     .save()
     .then((result) => {
       console.log(result);
+      res.status(200).json(result);
     })
-    .catch((err) => console.log(err));
-  res.status(200).json({ message: "Handling POST /visit", visitData: visit });
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
 });
 
 module.exports = router;
