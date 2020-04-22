@@ -4,20 +4,48 @@ const { uuid } = require("uuidv4");
 
 const Visit = require("../models/visit");
 
-router.get("/:visitId", (req, res, next) => {
-  const visitId = req.params.visitId;
+router.get("/:visitId?", (req, res, next) => {
+  let visitId = req.query.visitId;
+  if (!req.query.visitId) {
+    return next();
+  }
   Visit.find({ visitId: visitId })
     .exec()
     .then((result) => {
-      console.log(result);
       if (result.length) {
         res.status(200).json(result);
       } else {
-        res.status(200).json({ message: `No results found for visit ID ${visitId}` });
+        res
+          .status(200)
+          .json({ message: `No results found for visit ID ${visitId}` });
       }
     })
     .catch((err) => {
-      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
+
+router.get("/:userId?", (req, res, next) => {
+  let userId = req.query.userId;
+  let searchString = req.query.searchString;
+
+  Visit.find({ userId: userId })
+    .exec()
+    .then((result) => {
+      if (result.length && searchString) {
+        let filteredResult = result.filter(
+          (entry) => entry.name === searchString
+        );
+        res.status(200).json(filteredResult);
+      } else if (result.length) {
+        res.status(200).json(result);
+      } else {
+        res
+          .status(200)
+          .json({ message: `No entries in the database for user ID ${userId}` });
+      }
+    })
+    .catch((err) => {
       res.status(500).json({ error: err });
     });
 });
