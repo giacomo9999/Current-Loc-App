@@ -25,7 +25,7 @@ GET requests to Current-Loc can be made by submitting as query parameters either
 
 --
 
-And that's it. The app is deployed for use at https://current-loc-app.herokuapp.com - it's on the "free" tier of Heroku, so please allow a few seconds for it to spin up. Sample requests to the GET and PUT endpoints are below...(as of 2:39PM on Thursday, these were working fine:)
+And that's it. The app is deployed for use at https://current-loc-app.herokuapp.com - it's on the "free" tier of Heroku, so please allow a few seconds for it to spin up. Sample requests to the GET endpoints are below...(as of 2:39PM on Thursday, these were working fine:)
 
 https://current-loc-app.herokuapp.com/visit?visitId=b806d843-9b07-43f7-ab11-cd950af4f96d
 
