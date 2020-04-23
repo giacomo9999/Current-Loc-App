@@ -14,7 +14,11 @@ router.get("/:visitId?", (req, res, next) => {
     .exec()
     .then((result) => {
       if (result.length) {
-        res.status(200).json(result);
+        res.status(200).json({
+          userId: result[0].userId,
+          name: result[0].name,
+          visitId: result[0].visitId,
+        });
       } else {
         res
           .status(200)
@@ -43,9 +47,17 @@ router.get("/:userId?", (req, res, next) => {
         const searcher = new FuzzySearch(lastFiveLocs, ["name"], {
           caseSensitive: false,
         });
-        const sSResult = searcher.search(searchString);
 
-        res.status(200).json(sSResult);
+        const sSResult = searcher.search(searchString);
+        if (!sSResult.length) {
+          return res.json([]);
+        }
+
+        return res.status(200).json({
+          userId: sSResult[0].userId,
+          name: sSResult[0].name,
+          visitId: sSResult[0].visitId,
+        });
       } else if (result.length && !searchString) {
         res.status(200).json({
           message: `No search string supplied for user ID ${userId}`,
@@ -71,11 +83,9 @@ router.post("/", (req, res, next) => {
   visit
     .save()
     .then((result) => {
-      console.log(result);
-      res.status(200).json(result);
+      res.status(200).json({ visitId: result.visitId });
     })
     .catch((err) => {
-      console.log(err);
       res.status(500).json({ error: err });
     });
 });

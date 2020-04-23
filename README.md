@@ -29,7 +29,7 @@ And that's it. The app is deployed for use at https://current-loc-app.herokuapp.
 
 https://current-loc-app.herokuapp.com/visit?visitId=b806d843-9b07-43f7-ab11-cd950af4f96d
 
-https://current-loc-app.herokuapp.com/visit?searchString=Reis&userId=Jim_G
+https://current-loc-app.herokuapp.com/visit?searchString=Stone&userId=Jim_G
 
 Thanks! Please feel free to contact me with any questions.
 
