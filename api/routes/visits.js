@@ -40,9 +40,9 @@ router.get("/:userId?", (req, res, next) => {
       } else if (result.length) {
         res.status(200).json(result);
       } else {
-        res
-          .status(200)
-          .json({ message: `No entries in the database for user ID ${userId}` });
+        res.status(200).json({
+          message: `No entries in the database for user ID ${userId}`,
+        });
       }
     })
     .catch((err) => {
@@ -53,6 +53,7 @@ router.get("/:userId?", (req, res, next) => {
 router.post("/", (req, res, next) => {
   const visit = new Visit({
     visitId: uuid(),
+    visitDate: Date.now(),
     userId: req.body.userId,
     name: req.body.name,
   });
