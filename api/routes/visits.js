@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { uuid } = require("uuidv4");
+const FuzzySearch = require("fuzzy-search");
 
 const Visit = require("../models/visit");
 
@@ -33,14 +34,18 @@ router.get("/:userId?", (req, res, next) => {
     .exec()
     .then((result) => {
       if (result.length && searchString) {
-        const lastFiveLocsFilteredBySS = result
+        const lastFiveLocs = result
           .sort((a, b) => {
             return b.visitDate - a.visitDate;
           })
-          .slice(0, 5)
-          .filter((entry) => entry.name === searchString);
+          .slice(0, 5);
 
-        res.status(200).json(lastFiveLocsFilteredBySS);
+        const searcher = new FuzzySearch(lastFiveLocs, ["name"], {
+          caseSensitive: false,
+        });
+        const sSResult = searcher.search(searchString);
+
+        res.status(200).json(sSResult);
       } else if (result.length && !searchString) {
         res.status(200).json({
           message: `No search string supplied for user ID ${userId}`,
